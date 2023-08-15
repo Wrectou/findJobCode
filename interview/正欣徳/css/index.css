@@ -1,0 +1,53 @@
+* {
+  margin: 0;
+  padding: 0;
+}
+
+.container {
+  display: flex;
+  width: 100vw;
+  height: 100vh;
+}
+.container > div{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.left {
+  flex: 0 0 200px;
+  background: #f1f1f1;
+}
+.center {
+  flex: 1;
+  background: skyblue;
+}
+.right {
+  flex: 0 0 200px;
+  background: #e1e1e1;
+}
+
+@media screen and (max-width: 768px) {
+  .container{
+    background: red;
+    flex-flow: column;
+  }
+  .left{
+
+  }
+  .center {
+    order: 3;
+    flex: 0 0 200px;
+  }
+  .right {
+    order: 2;
+    flex: 1;
+  }
+}
+
+
+.flex0{
+  flex: 0;
+}
+.flexFix{
+  flex: 1;
+}

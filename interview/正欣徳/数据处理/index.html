@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>正欣徳-数据处理</title>
+</head>
+<body>
+
+  <input type="text" id="input">
+  <button id="handle">处理</button>
+
+  <script>
+    // 编写一个输入框支持字符串输入，一个按钮，点击后根据输入框的内容，按照以下条件处理
+    // 1、校验数据的有效性，是否为JSON类型的数据
+    // 2、遍历所有值，如果为string类型，则替换成abc
+    // 3、输出处理后的JSON数据
+
+    const inputEl = document.querySelector("#input");
+    const buttonEl = document.querySelector("#handle");
+
+    buttonEl.addEventListener("click", function() {
+      checkTypeFunc(inputEl.value);
+    })
+
+    function checkTypeFunc(value) {
+      if (value === "") return alert("输入内容不能为空！");
+      try {
+        let dataJson = JSON.parse(value);
+        let resultData = dataHandle(dataJson);
+        console.log("最终结果：", resultData);
+      } catch (error) {
+        alert("不是JSON类型！");
+      }
+    }
+
+    function getDataType(data) {
+      return Object.prototype.toString.call(data).slice(8, -1);
+    }
+
+    function dataHandle(data) {
+      if (typeof data === "object" && data !== null) {
+        for (const key in data) {
+          if (getDataType(data[key]) === "String") {
+            data[key] = "abc";
+          } else if (getDataType(data[key]) === "Object") {
+            dataHandle(data[key]);
+          } else if (getDataType(data[key]) === "Array") {
+            data[key].forEach((item, i) => {
+              if (getDataType(item) === "String") {
+                data[key][i] = "abc";
+              }
+            })
+          }
+        }
+      }
+      return data;
+    }
+  
+  </script>
+</body>
+</html>

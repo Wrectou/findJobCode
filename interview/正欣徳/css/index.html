@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>正欣德-css</title>
+  <link rel="stylesheet" href="./index.css">
+</head>
+<body>
+  <!-- 
+    - 实现一个左右定宽、中间自适应的三栏布局页面，定义3栏的顺序为1,2,3
+    - 左中右分别添加文字 1，2，3且文宇水平垂直居中
+    - 布局铺满（宽高整个窗口），三栏有简单的颜色区分
+    - 当屏幕竞度缩小为 768px 以下时，三栏纵向布局，宽度100%，上下定高，中间自适应，且三栏顺市为1，3，2
+    - 点击三栏中的任意一栏，被点击的一栏宽/高变为自适应，其余两栏宽/高固定 
+  -->
+
+  <div class="container">
+    <div class="left">1</div>
+    <div class="center">2</div>
+    <div class="right">3</div>
+  </div>
+
+  <script>
+    const divListElArr = document.querySelectorAll(".container div")
+    console.log(divListElArr);
+    divListElArr.forEach((item, i) => {
+      console.log(item);
+      item.addEventListener("click", function() {
+        item.setAttribute("class", item.getAttribute("class").split(" ")[0] + " flex0")
+        brotherHandle(i)
+      })
+    })
+
+    function brotherHandle(i) {
+      getBrotherEls(divListElArr, i).forEach(item => {
+        console.log(item);
+        item.setAttribute("class", item.getAttribute("class").split(" ")[0] + " flexFix")
+      })
+    }
+
+    function getBrotherEls(elArr, i) {
+      console.log(elArr);
+      let elNumberArr = new Array(elArr.length)
+      console.log(elNumberArr);
+      // let elNumberArr = []
+      let brotherElsArr = []
+      for (let i = 0; i < elArr.length; i++) {
+        elNumberArr.push(i)
+      }
+      elNumberArr = elNumberArr.filter(item => item !== i)
+      elNumberArr.forEach(i => { brotherElsArr.push(elArr[i]) })
+      return brotherElsArr;
+    }
+  </script>
+  
+</body>
+</html>
