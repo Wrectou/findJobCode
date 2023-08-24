@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>拖动上传</title>
+  <style>
+    *{
+      margin: 0;
+      padding: 0;
+    }
+    .upload-box{
+      position: relative;
+      margin: 200px auto;
+      padding: 100px 40px;
+      width: 300px;
+      border-radius: 10px;
+      text-align: center;
+      background: #f1f1f1;
+    }
+    label{
+      display: inline-block;
+      margin: 0 auto;
+      padding: 6px 10px;
+      background: skyblue;
+      color: #fff;
+      border-radius: 10px;
+    }
+    .input-file{
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      opacity: 0;
+    }
+  </style>
+</head>
+<body>
+  <div class="upload-box">
+    <input class="input-file" id="upload" type="file" />
+    <label for="upload">文件拖动到此上传</label>
+  </div>
+  <script>
+    const uploadEl = document.querySelector("#upload");
+
+    uploadEl.addEventListener("change", function(e) {
+      console.log(e, e.target.files);
+    })
+  </script>
+</body>
+</html>

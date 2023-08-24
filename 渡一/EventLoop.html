@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>EventLoop</title>
+</head>
+<body>
+  <button id="begin">开始</button>
+  <button id="interaction">添加交互任务</button>
+  <script>
+    function delay(duration) {
+      var start = Date.now()
+      while(Date.now() - start < duration) {}
+    }
+
+    function addDelay() {
+      console.log("添加延时队列");
+      setTimeout(() => {
+        console.log("延时队列执行");
+      }, 0)
+      delay(2000)
+    }
+
+    function addNetWork() {
+      console.log("添加网络队列");
+      // fetch("../a.js").then(res => {
+      //   console.log("网络队列执行");
+      // })
+      Promise.resolve().then(() => {
+        console.log("网络队列执行");
+      })
+      delay(2000)
+    }
+
+    function addInteraction() {
+      console.log("添加交互队列");
+      interaction.onclick = function() {
+        console.log("交互队列执行");
+      }
+      delay(2000)
+    }
+
+    begin.onclick = function() {
+      addDelay()
+      addNetWork()
+      addInteraction()
+      console.log("=========");
+    }
+  </script>
+</body>
+</html>

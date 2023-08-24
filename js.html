@@ -3,7 +3,11 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <!-- <meta http-equiv="Cache-Control" content="no-cache"> -->
+  <!-- <meta http-equiv="Cache" content="no-cache"> -->
+  <!-- <meta http-equiv="Pragma" content="no-cache"> -->
   <title>jsCode</title>
+  <link rel="stylesheet" href="./a.css">
 </head>
 <body>
   <script>
@@ -69,7 +73,15 @@
     console.log(result);
      */
 
-    /* function query(list) {
+    /* // Array.prototype.myFilter = function(fn) {
+    //   let arr = []
+    //   for(let i = 0; i < this.length; i++) {
+    //     if (fn(this[i])) arr.push(this[i])
+    //   }
+    //   return arr
+    // }
+    
+    function query(list) {
       return {
         where(fn) {
           list = list.filter(fn)
@@ -120,10 +132,8 @@
       .groupBy('name')
       .execute();
 
-    console.log(result); */
-
-
-
+    console.log(result);
+ */
 
     
     /* // Event Loop
@@ -145,6 +155,60 @@
     }) */
 
 
+    /* // deepClone
+    var obj = {
+      name: "zhangsan",
+      age: 22,
+      hh: {
+        ad: "dsdsd",
+        sdads: null,
+      },
+      dasd: {
+        hh: false,
+        ddd: {
+          g4ggf: "dssdsdsd",
+          aarr1: [1,2,3,4,"3"],
+          jdter: true,
+          cww: undefined,
+        },
+        opp: 123
+      },
+      cc: function() {
+        console.log(this.name);
+      },
+      arr: [1,2,[12],3,["1","2","3"]]
+    };
+    console.log(obj);
+    Object.prototype.protohhh = "dsad"
+    // var obj1 = JSON.parse(JSON.stringify(obj));
+
+
+    function deepClone(origin, target = {}) {
+      if (typeof origin === "object" && origin !== null) {
+        for (let key in origin) {
+          if (origin.hasOwnProperty(key)) {
+            if (typeof origin[key] === "object") {
+              target[key] = deepClone(origin[key], Array.isArray(origin[key]) ? [] : {})
+            } else {
+              target[key] = origin[key]
+            }
+          }
+        }
+      }
+      return target
+    }
+    var obj1 = deepClone(obj)
+    // console.log(obj1);
+    // obj.cc()
+    // obj1.name = "aaa"
+    // obj1.cc()
+    // console.log(obj == obj1, obj.dasd === obj1.dasd);
+    // console.log(obj.dasd.ddd.aarr1 === obj1.dasd.ddd.aarr1);
+    // obj.dasd.ddd.aarr1.push(111)
+    // console.log(obj.dasd.ddd.aarr1 === obj1.dasd.ddd.aarr1); */
+
+
   </script>
+  <script src="./a.js"></script>
 </body>
 </html>
