@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>flip动画</title>
+  <style>
+    button{
+      padding: 4px 10px;
+      background: skyblue;
+      color: #fff;
+      outline: none;
+      border: none;
+      border-radius: 4px;
+      font-size: 20px;
+      cursor: pointer;
+    }
+    .list{
+      margin: 10px 0;
+      padding: 8px;
+      width: 200px;
+      border: solid 1px #e1e1e1;
+      border-radius: 4px;
+    }
+    li{
+      margin: 10px 0;
+      padding: 4px 10px;
+      background: greenyellow;
+      color: #fff;
+      border: solid 1px #999;
+      text-align: center;
+      border-radius: 50px;
+    }
+  </style>
+</head>
+<body>
+  <button>flip</button>
+  <ul class="list">
+    <!-- <li style="background: #e75723;">HTML+CSS</li> -->
+    <li>HTML+CSS</li>
+    <li>JavaScript</li>
+    <li>NodeJs</li>
+    <li>工程化</li>
+    <li>Vue</li>
+    <li>React</li>
+    <li>Webgl</li>
+  </ul>
+  <script>
+    const btnEl = document.querySelector("button")
+    let listEl = document.querySelector(".list")
+    const firstItemEl = document.querySelector(".list li:first-child")
+    let listElChildren = Array.prototype.slice.call(listEl.children)
+
+    let rectObj = {}
+    listElChildren.forEach(item => rectObj[item.textContent] = {start:getLocation(item)} )
+
+    function getLocation(el) {
+      const rect = el.getBoundingClientRect()
+      return rect.top
+    }
+
+    // const start = getLocation(firstItemEl)
+
+    btnEl.addEventListener("click", function() {
+      let oldItem = undefined
+      listElChildren.forEach(item => {
+        // console.log(item.textContent, oldItem?.textContent);
+        listEl.insertBefore(item, oldItem)
+        rectObj[item.textContent]["end"] = getLocation(item)
+        oldItem = item
+      })
+      console.log(rectObj);
+
+      // listEl.insertBefore(firstItemEl, undefined)
+      // const end = getLocation(firstItemEl)
+
+      listElChildren.forEach(item => {
+        // console.log(rectObj[item.textContent].start - rectObj[item.textContent].end);
+        item.style.transform = `translateY(${rectObj[item.textContent].start - rectObj[item.textContent].end}px)`
+        raf(() => {
+          item.style.transition = "transform .5s"
+          item.style.removeProperty('transform')
+          setTimeout(() => item.style.removeProperty('transition'), 500)
+          console.log("play");
+        })
+      })
+
+      // const gap = start - end
+      // firstItemEl.style.transform = `translateY(${gap}px)`
+      // raf(() => {
+      //   firstItemEl.style.transition = "transform 1s"
+      //   firstItemEl.style.removeProperty('transform')
+      //   console.log("play");
+      // })
+
+      setTimeout(() => {
+        listEl = document.querySelector(".list")
+        listElChildren = Array.from(listEl.children)
+        listElChildren.forEach(item => {
+          rectObj[item.textContent] = {start:getLocation(item)}
+        })
+      }, 500)
+
+    })
+
+    function raf(callback) {
+      requestAnimationFrame(() => {
+        requestAnimationFrame(callback)
+      })
+    }
+
+    function delay(duration = 1000) {
+      const start = Date.now()
+      while(Date.now() - duration < start) {}
+    }
+
+  </script>
+</body>
+</html>

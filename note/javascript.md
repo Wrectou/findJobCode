@@ -1,5 +1,5 @@
 Event Loop
-#### Event Loop (事件轮询)
+##### Event Loop (事件轮询)
 
 > ###### 总结：
 >
@@ -29,13 +29,25 @@ Event Loop
 
 
 
-Promise
+##### Promise / async /await
+
+>是否resolve，没有就一直pending不再执行
+>
+>`.then`函数中的参数期待的是函数，如果不是函数的话会发生透传(类似题`3.8` )
+
+
+
+
+
+
 
 原型、原型链
 
 作用域、作用域链
 
 闭包
+
+
 
 ##### 浅拷贝、深拷贝
 
@@ -139,3 +151,52 @@ call、apply、bind
 >
 > - 单个tcp连接，很好的节省服务器资源和带宽；
 > - 全双工通信，更及时。
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+##### Array
+
+###### 1、伪数组转数组
+
+```javascript
+Array.prototype.slice.call(伪数组)
+[].slice.call(伪数组)
+Array.from(伪数组)
+[...伪数组]
+```
+
+###### 2、slice方法
+
+> 返回一个新的数组对象，由start和end决定对原始数组的浅拷贝（包括start，不包括end）。
