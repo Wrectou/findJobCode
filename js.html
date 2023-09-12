@@ -7,7 +7,7 @@
   <!-- <meta http-equiv="Cache" content="no-cache"> -->
   <!-- <meta http-equiv="Pragma" content="no-cache"> -->
   <title>jsCode</title>
-  <link rel="stylesheet" href="./a.css">
+  <!-- <link rel="stylesheet" href="./a.css"> -->
 </head>
 <body>
   <script>
@@ -72,6 +72,7 @@
       .execute()
     console.log(result);
      */
+
 
     /* // Array.prototype.myFilter = function(fn) {
     //   let arr = []
@@ -207,8 +208,68 @@
     // obj.dasd.ddd.aarr1.push(111)
     // console.log(obj.dasd.ddd.aarr1 === obj1.dasd.ddd.aarr1); */
 
+    
+    /* Array.prototype.myFlat = function() {
+      let arr = []
+      for(let i = 0; i < this.length; i++) {
+        if (Object.prototype.toString.call(this[i]) === "[object Array]") {
+          arr = arr.concat(this[i].myFlat())
+        } else {
+          arr.push(this[i])
+        }
+      }
+      return arr
+    }
+    var arr = [1,2,[3,4],5,6,[7,8,[9,10,3],11,4],12,1,2,3]
+    console.log(arr, arr.myFlat()); */
+
+
+    /* // 微软面试题 给定包含数字2-9的字符串，返回所对应所有字母组合
+    function keyboardMap(digits) {
+      var telephoneNumberAbcArr = ["", "", "abc", "def", "ghi", "jkl", "mno", "pqrs", "tuv", "wxyz"];
+      var result = [];
+      for (let i = 0; i < digits.length; i++) {
+        console.log(digits, digits[i], telephoneNumberAbcArr[digits[i]]);
+        result = [...compose(result, telephoneNumberAbcArr[digits[i]])];
+      }
+      function compose(arr1, arr2) {
+        var r = [];
+        if (arr1.length < 1) return [...arr2];
+        if (arr2.length < 1) return [...arr1];
+        for (let i = 0; i < arr1.length; i++) {
+          for (let j = 0; j < arr2.length; j++) {
+            r.push(arr1[i] + arr2[j]);
+          }
+        }
+        return r;
+      }
+      return result;
+    }
+    console.log(keyboardMap("9527")); */
+
+
+    /* // 值和引用 下面代码输出什么（字节）
+    var foo = { bar: 1 }; // {bar:2} {bar:3} {bar:4}
+    var arr1 = [1, 2, foo];
+    var arr2 = arr1.slice(1);   // [2, foo] [3, foo]
+    arr2[0]++;
+    arr2[1].bar++;
+    foo.bar++;
+    arr1[2].bar++;
+    console.log(arr1[1] === arr2[0]);   // false
+    console.log(arr1[2] === arr2[1]);   // true
+    console.log(foo.bar);   // 4 */
+
+
+    // 连续赋值 阿里面试题
+    var a = { n: 1 };
+    var b = a;
+    a.x = a = { n: 2 };
+    // 不会 赋值运算，先定义左边的 a.x，在运算后面的整体 a = { n: 2 }
+    console.log(a.x);   // undefined
+    console.log(b.x);   // { n: 2 }
 
   </script>
-  <script src="./a.js"></script>
+  <!-- <script src="./a.js"></script> -->
 </body>
 </html>

@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>流光文字背景-修复窗口大小</title>
+  <style>
+    *{
+      margin: 0;
+      padding: 0;
+    }
+    .container{
+      width: 800px;
+      margin: 100px auto;
+      line-height: 30px;
+      font-size: 20px;
+      background: rgba(255,255,255,.7);
+    }
+  </style>
+</head>
+<body>
+  
+  需要去学习的要点：Math方法  array fill方法  窗口宽度高度
+
+  
+
+  需求:
+      elId: 绑定的canvas元素id, 默认canvas
+      width: canvas宽度, 默认窗口宽度
+      height: canvas高度, 默认窗口高度
+      fontSize: 字体大小, 默认20
+      fontFamily: 字体种类, 默认"Roboto Mono"
+      fontColor: 字体颜色, 默认#ffffff
+      backColor: 背景颜色, 默认rgba(0,0,0,.1)
+      randomTextStr: 随即文字字符串, 默认兰亭序
+      randomColorArr: 随即文字颜色数组, 默认[ "#33B5E5", "#0099CC", "#AA66CC", 等 ]
+      animationSpeed: 动画速度, 默认40ms
+      coulmnWidth: 列宽, 默认30
+        
+
+  <div class="container">
+    da设置多条css样式
+    如果在一个网页中给id="mydiv"的元素添加css样式，先获取该节点：
+    var obj = document.getElementById("mydiv");
+    给节点添加css：
+    如果需要添加的css不多的话，可以obj.style.width = "300px";
+    如果需要添加多条css语句的话，这样会有多条，如：
+    obj.style.width="300px";
+    obj.style.height="300px";
+    obj.style.border="1px solid #ddd";
+    ……
+    这样会不会显得有些麻烦，且需要重复敲写类似的语句，那么可以这样：
+    （1）通过自己编写js函数设置css
+    function setCss(obj,css){
+    for(var attr in css){
+    obj.style[attr] = css[attr];
+    }
+    }
+    setCss(obj,{"width":"300px","height":"300px","border":"1px solid #ddd"});
+    (2)通过cssText方法设置css
+    obj.style.cssText = "width:300px;height:300px;border:1px solid #ddd;";
+    这样会不会显得简单，且方便了很多呢，特别是对于新create的元素进行初始化css样式
+    
+    分类: js小知识
+  </div>
+  <div class="container">
+    da设置多条css样式
+    如果在一个网页中给id="mydiv"的元素添加css样式，先获取该节点：
+    var obj = document.getElementById("mydiv");
+    给节点添加css：
+    如果需要添加的css不多的话，可以obj.style.width = "300px";
+    如果需要添加多条css语句的话，这样会有多条，如：
+    obj.style.width="300px";
+    obj.style.height="300px";
+    obj.style.border="1px solid #ddd";
+    ……
+    这样会不会显得有些麻烦，且需要重复敲写类似的语句，那么可以这样：
+    （1）通过自己编写js函数设置css
+    function setCss(obj,css){
+    for(var attr in css){
+    obj.style[attr] = css[attr];
+    }
+    }
+    setCss(obj,{"width":"300px","height":"300px","border":"1px solid #ddd"});
+    (2)通过cssText方法设置css
+    obj.style.cssText = "width:300px;height:300px;border:1px solid #ddd;";
+    这样会不会显得简单，且方便了很多呢，特别是对于新create的元素进行初始化css样式
+    
+    分类: js小知识
+  </div>
+  <div class="container container3">
+    da设置多条css样式
+    如果在一个网页中给id="mydiv"的元素添加css样式，先获取该节点：
+    var obj = document.getElementById("mydiv");
+    给节点添加css：
+    如果需要添加的css不多的话，可以obj.style.width = "300px";
+    如果需要添加多条css语句的话，这样会有多条，如：
+    obj.style.width="300px";
+    obj.style.height="300px";
+    obj.style.border="1px solid #ddd";
+    ……
+    这样会不会显得有些麻烦，且需要重复敲写类似的语句，那么可以这样：
+    （1）通过自己编写js函数设置css
+    function setCss(obj,css){
+    for(var attr in css){
+    obj.style[attr] = css[attr];
+    }
+    }
+    setCss(obj,{"width":"300px","height":"300px","border":"1px solid #ddd"});
+    (2)通过cssText方法设置css
+    obj.style.cssText = "width:300px;height:300px;border:1px solid #ddd;";
+    这样会不会显得简单，且方便了很多呢，特别是对于新create的元素进行初始化css样式
+    
+    分类: js小知识
+  </div>
+  <script src="./danceTextCanvas.js"></script>
+  <script>
+    const myDanceCanvas = new DanceTextCanvas({
+      elId: "myCanvas",
+      // width: 1000,
+      // height: 800,
+      // fontSize: 12,
+      // columnWidth: 50,
+      // fontFamily: "微软雅黑",
+      // backColor: "rgb(255, 255, 255, .1)",
+      // randomColorArr: ["black", "red", "blue", "green"],
+      // randomTextStr: "console.log(Hello World!);",
+      // animationSpeed: 80
+    });
+    myDanceCanvas.init();
+  </script>
+  <script>
+    // 观察者模式埋点
+    const intersectionObserver = new IntersectionObserver((entries) => {
+      // 如果 intersectionRatio 为 0，则目标在视野外，
+      // 我们不需要做任何事情。
+      if (entries[0].intersectionRatio <= 0) return;
+      console.log("Loaded new items");
+      // intersectionObserver.unobserve(document.querySelector(".container3"));
+    });
+    // 开始监听
+    intersectionObserver.observe(document.querySelector(".container3"));
+  </script>
+</body>
+</html>

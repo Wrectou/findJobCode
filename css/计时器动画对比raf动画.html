@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>计时器动画对比raf动画</title>
+  <style>
+    .round{
+      position: relative;
+      margin: 40px 0;
+      width: 80px;
+      height: 80px;
+      border-radius: 50%;
+      background: #ff6600;
+    }
+  </style>
+</head>
+<body>
+  <div class="round" id="round1"></div>
+  <div class="round" id="round2"></div>
+  <script>
+    let x1 = 0;
+    function animationSetInterval() {
+      setInterval(() => {
+        console.log("x1: ", x1);
+        x1 ++;
+        if (x1 + 100 > window.innerWidth) x1 = 0;
+        round1.style.left = x1 + "px";
+      }, 1000 / 60);
+    }
+    animationSetInterval()
+
+    
+    let x2 = 0;
+    function animationRaf() {
+      requestAnimationFrame(() => {
+        console.log("x2: ", x2);
+        x2 ++;
+        if (x2 + 100 > window.innerWidth) x2 = 0;
+        round2.style.left = x2 + "px";
+        animationRaf();
+      })
+    }
+    animationRaf()
+  </script>
+</body>
+</html>

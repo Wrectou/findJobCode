@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>canvas截图</title>
+  <style>
+    *{
+      margin: 0;
+      padding: 0;
+    }
+    .canvas-container,
+    .canvas-container2{
+      display: none;
+      /* border: solid 1px #999; */
+    }
+    #canvas2{
+      display: none;
+    }
+  </style>
+</head>
+<body>
+
+  <input type="file" accept="image/*" id="input" >
+  
+  <div class="canvas-container">
+    <canvas id="canvas"></canvas>
+  </div>
+
+  <div class="canvas-container2">
+    <canvas id="canvas2"></canvas>
+  </div>
+
+  <script>
+    const canvasContainerEl = document.querySelector(".canvas-container");
+    const canvasContainer2El = document.querySelector(".canvas-container2");
+    const canvasEl = document.querySelector("#canvas");
+    const canvas2El = document.querySelector("#canvas2");
+    const ctx = canvasEl.getContext("2d");
+    const ctx2 = canvas2El.getContext("2d");
+    const inputEl = document.querySelector("#input");
+
+    const img = new Image();
+
+    let initPos = [];
+    let screenShotData = [];
+
+    const MASK_OPACITY = 0.5;
+
+    const init = () => {
+      bindEvent()
+    }
+
+    function bindEvent() {
+      inputEl.addEventListener("change", inputHandle, false);
+      canvasEl.addEventListener("mousedown", handleCanvasMouseDown, false);
+    }
+
+    function handleCanvasMouseDown(e) {
+      initPos = [e.offsetX, e.offsetY];
+      canvasEl.addEventListener("mousemove", handleCanvasMouseMove, false);
+      canvasEl.addEventListener("mouseup", handleCanvasMouseUp, false);
+    }
+
+    function handleCanvasMouseMove(e) {
+      const endX = e.offsetX;
+      const endY = e.offsetY;
+      const [ startX, startY ] = initPos;
+      const rectWidth = endX - startX;
+      const rectHeight = endY - startY;
+      const { width, height } = canvasEl;
+
+      screenShotData = [ startX, startY, rectWidth, rectHeight ];
+
+      ctx.clearRect(0, 0 , width, height);
+
+      drawImageMask(0, 0, width, height, MASK_OPACITY);
+      drawScreenShot(width, height, rectWidth, rectHeight);
+      // console.log(rectWidth, rectHeight);
+    }
+
+    function handleCanvasMouseUp() {
+      canvasEl.removeEventListener("mousemove", handleCanvasMouseMove, false);
+      canvasEl.removeEventListener("mouseup", handleCanvasMouseUp, false);
+      drawScreenShotImage(screenShotData);
+    }
+
+    function inputHandle(e) {
+      const file = e.target.files[0];
+      const reader = new FileReader();
+      reader.readAsDataURL(file);
+      reader.onload= function(e) {
+        const data = e.target.result;
+        img.src = data;
+        img.onload = function(e) {
+          const { width, height } = this;
+          generateCanvas(canvasContainerEl, canvasEl, width, height);
+          ctx.drawImage(img, 0, 0, width, height);
+          drawImageMask(0, 0, width, height, MASK_OPACITY);
+        }
+      }
+    }
+
+    function generateCanvas(container, canvas, width, height) {
+      container.style.width = width + "px";
+      container.style.height = height + "px";
+      canvas.width = width;
+      canvas.height = height;
+      container.style.display = "block";
+    }
+
+    function drawImageMask(x, y, width, height, opacity) {
+      ctx.fillStyle = `rgba(0, 0, 0, ${opacity})`;
+      ctx.fillRect(x, y, width, height);
+    }
+
+    function drawScreenShot(width, height, rectWidth, rectHeight) {
+      ctx.globalCompositeOperation = "destination-out";
+      ctx.fillStyle = "#000";
+      ctx.fillRect(...initPos, rectWidth, rectHeight);
+
+      ctx.globalCompositeOperation = "destination-over";
+      ctx.drawImage(img, 0, 0, width, height, 0, 0, width, height);
+    }
+
+    function drawScreenShotImage(screenShotData) {
+      const data = ctx.getImageData(...screenShotData);
+     
+      generateCanvas(canvasContainer2El, canvas2El, screenShotData[2], screenShotData[3]);
+      ctx2.clearRect(...screenShotData);
+      ctx2.putImageData(data, 0, 0);
+
+      for (let el of canvasContainer2El.children) {
+        if (el.localName === "img") {
+          // el.remove();
+          canvasContainer2El.removeChild(el);
+        }
+      }
+      const img2  = document.createElement("img");
+      img2.src = canvas2El.toDataURL();
+      canvasContainer2El.appendChild(img2);
+    }
+
+
+    init()
+
+  </script>
+
+</body>
+</html>

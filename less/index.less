@@ -1,0 +1,45 @@
+@ganger: #f40;
+@width: 10px;
+@height: @width + 20px;
+
+.content-center() {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.container{
+  .content-center();
+  background: skyblue;
+  .item{
+    background: @ganger;
+    margin: 10px;
+    padding: 20px;
+    width: @width;
+    height: @height;
+    &.active{
+      background: black;
+    }
+  }
+}
+
+.round(@r: 5px) {
+  border-radius: @r;
+}
+.item1 {
+  .round();
+}
+.item2 {
+  .content-center();
+  .round(20px);
+}
+
+// 不编译到css
+
+/* 编译到css */
+
+
+each(range(0, 3), {
+  .col-@{value} {
+    height: (@value * 50px);
+  }
+});

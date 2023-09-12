@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>印章</title>
+  <style>
+    *{
+      margin: 0;
+      padding: 0;
+    }
+    .container {
+      margin: 100px auto;
+      text-align: center;
+    }
+    canvas{
+      width: 400px;
+      height: 400px;
+      /* border: solid 1px; */
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <canvas id="canvas"></canvas>
+  </div>
+  <script>
+    const canvasEl = document.querySelector("#canvas");
+    canvasEl.width = 400 * devicePixelRatio;
+    canvasEl.height = 400 * devicePixelRatio;
+    const WIDTH = canvasEl.width;
+    const HEIGHT = canvasEl.height;
+    const ctx = canvasEl.getContext("2d");
+
+    ctx.fillStyle = "rgba(0, 0, 0, .1)";
+    console.log(canvasEl.width, ctx);
+    ctx.fillRect(0, 0, WIDTH, HEIGHT);
+
+    ctx.strokeStyle = "skyblue";
+    ctx.lineWidth = 6;
+    ctx.strokeRect(10, 10, WIDTH - 20, HEIGHT - 20);
+
+    ctx.clearRect(20, 20, WIDTH - 40, HEIGHT -40);
+
+    ctx.strokeStyle = "red";
+    ctx.lineWidth = 4;
+    ctx.beginPath();
+    ctx.arc(WIDTH / 2, WIDTH / 2, WIDTH / 2 - 2, 0, 360)
+    ctx.stroke();
+
+    ctx.strokeStyle = "#000";
+    ctx.lineWidth = 2;
+    ctx.beginPath();
+    ctx.moveTo(100, 100);
+    ctx.lineTo(200, 200);
+    ctx.stroke();
+
+    ctx.beginPath();
+    ctx.fillStyle = "#000";
+    ctx.arc(100, 100, 4, 0, 2 * Math.PI);
+    ctx.fill();
+
+    ctx.beginPath();
+    ctx.fillStyle = "#000";
+    ctx.arc(200, 200, 4, 0, 2 * Math.PI);
+    ctx.fill();
+
+
+    class RandomPoint {
+      constructor() {
+        this.r = 6;
+        this.x = getRangeRandom(0, canvasEl.width - this.r / 2);
+        this.y = getRangeRandom(0, canvasEl.height - this.r / 2);
+      }
+      draw() {
+        ctx.beginPath();
+        ctx.fillStyle = "#000";
+        ctx.arc(this.x, this.y, this.r, 0, 2 * Math.PI);
+        ctx.fill();
+      }
+    }
+    new RandomPoint().draw()
+
+    class Graph {
+      constructor() {
+        this.pointArr = [];
+      }
+      draw() {
+        for (let i = 0; i < 50; i++) {
+          this.pointArr.push(new RandomPoint());
+        }
+        
+        for (let i = 0; i < this.pointArr.length; i++) {
+          this.pointArr[i].draw();
+          for (let j = i + 1; j < this.pointArr.length; j++) {
+            console.log(i, j);
+            ctx.strokeStyle = "skyblue";
+            ctx.lineWidth = 2;
+            ctx.beginPath();
+            ctx.moveTo(this.pointArr[i].x, this.pointArr[i].y);
+            ctx.lineTo(this.pointArr[j].x, this.pointArr[j].y);
+            ctx.stroke();
+          }
+        }
+
+        // this.pointArr.forEach(item => {
+        //   item.draw();
+        //   ctx.strokeStyle = "skyblue";
+        //   ctx.beginPath();
+        //   ctx.moveTo(item.x);
+        //   ctx.lineTo()
+        // })
+        console.log(this.pointArr);
+      }
+    }
+    const a = new Graph().draw()
+
+    function getRangeRandom(min, max) {
+      // [0, 9)
+      // Math.floor(Math.random() * 10);
+
+      // [0, 10]
+      // Math.floor(Math.random() * (10 + 1));
+
+      // [2, 10)
+      // Math.floor(Math.random() * (10 - 2)) + 2;
+
+      // [2, 10]
+      // Math.floor(Math.random() * (10 - 2 + 1)) + 2;
+
+      return Math.floor(Math.random() * (max - min + 1)) + min;
+
+    }
+
+
+  </script>
+</body>
+</html>

@@ -1,0 +1,38 @@
+.container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: skyblue;
+}
+.container .item {
+  background: #f40;
+  margin: 10px;
+  padding: 20px;
+  width: 10px;
+  height: 30px;
+}
+.container .item.active {
+  background: black;
+}
+.item1 {
+  border-radius: 5px;
+}
+.item2 {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 20px;
+}
+/* 编译到css */
+.col-0 {
+  height: 0px;
+}
+.col-1 {
+  height: 50px;
+}
+.col-2 {
+  height: 100px;
+}
+.col-3 {
+  height: 150px;
+}

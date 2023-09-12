@@ -1,4 +1,3 @@
-Event Loop
 ##### Event Loop (事件轮询)
 
 > ###### 总结：
@@ -46,6 +45,8 @@ Event Loop
 作用域、作用域链
 
 闭包
+
+
 
 
 
@@ -139,7 +140,61 @@ Event Loop
 
 柯里化
 
-防抖、截流
+
+
+
+
+
+
+##### 防抖和截流
+
+> 防抖函数：
+>
+> - 函数防抖指的是在一段时间内频繁触发某个事件时，只执行最后一次触发的函数。
+> - 常用于输入框，窗口大小调整，窗口滚动等事件的处理。
+>
+> ```javascript
+> // 防抖函数
+> function debounce(fn, delay = 300) {
+>     let timer;
+>     return function() {
+>         let args = arguments;
+>         let context = this;
+>         clearTimeout(timer);
+>         timer = setTimeout(function() {
+>            fn.call(context, ...args); 
+>         }, delay);
+>     }
+> }
+> ```
+>
+> 节流函数：
+>
+> - 函数节流指的是频繁触发某个事件时，每隔一段时间，只执行一次函数。
+> - 经典的应用场景是在用户滚动页面时触发的事件，比如无限滚动加载数据。
+>
+> ```javascript
+> function throttle(fn, wait) {
+>     let lastTime = 0;
+>     return function() {
+>         let args = arguments;
+>         let context = this;
+>         let currentTime = Date.now();
+>         if (currentTime - lastTime >= wait) {
+>            fn.call(context, ...args); 
+>            lastTime = currentTime;
+>         }
+>     }
+> }
+> ```
+
+
+
+
+
+
+
+
 
 call、apply、bind
 
@@ -154,6 +209,40 @@ call、apply、bind
 
 
 
+##### Math
+
+> `Math.floor()` 函数总是返回小于等于一个给定数字的最大整数。
+>
+> `Math.random()` 函数返回一个浮点数，伪随机数在范围从**0 到**小于**1**，也就是说，从 0（包括 0）往上，但是不包括 1（排除 1），然后你可以缩放到所需的范围。实现将初始种子选择到随机数生成算法;它不能被用户选择或重置。
+
+
+
+
+
+
+
+##### 纯函数
+
+> 不依赖于除参数外的其他外部作用域变量，也不修改其作用域外的其他变量的函数。
+>
+> - 确定性：相同的入参一定有相同的输出；
+> - 无副作用：除返回函数值之外不产生附加影响。（如发起网络请求，修改全局变量或者改变外部存储等）
+>
+> ```javascript
+> var arr1 = [1, 2, 3, 4, 5, 6, 7];
+> console.log(arr1.slice(0, 2));		// [1, 2]
+> console.log(arr1.slice(0, 2));		// [1, 2]
+> console.log(arr1.slice(0, 2));		// [1, 2]
+> console.log(arr1);		// [1, 2, 3, 4, 5, 6, 7]
+> 
+> var arr2 = [1, 2, 3, 4, 5, 6, 7];
+> console.log(arr2.splice(0, 2));		// [1, 2]
+> console.log(arr2.splice(0, 2));		// [3, 4]
+> console.log(arr2.splice(0, 2));		// [5, 6]
+> console.log(arr2);		// [7]
+> 
+> // 对比之下slice不改变原始数组，且相同的输入对应相同的输出，所以clice是纯函数，而splice不是。
+> ```
 
 
 
@@ -177,16 +266,7 @@ call、apply、bind
 
 
 
-
-
-
-
-
-
-
-
-
-##### Array
+##### [Array](https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/Array)
 
 ###### 1、伪数组转数组
 
@@ -199,4 +279,47 @@ Array.from(伪数组)
 
 ###### 2、slice方法
 
-> 返回一个新的数组对象，由start和end决定对原始数组的浅拷贝（包括start，不包括end）。
+> 返回一个新的数组对象，由start和end决定对原始数组的浅拷贝（包括start，不包括end），不改变原始数组。
+>
+> `slice(start, end)`
+
+###### 2、splice方法
+
+> 通过移除或者替换已存在的元素或添加新元素就地变一个数组的内容。会改变原始数组。
+>
+> `splice(start, deleteCount, item1, item2, itemN)`
+>
+> - 插入数据在`start`之前；
+> - 移除数据从`start`自身开始；
+> - `start`为负数时实际`start`为`start + arr.length`;
+> - `deleteCount`为可选参数，不写代表从`start`开始删除后续所有元素；
+
+###### 3、toSpliced方法
+
+> 和splice方法用法相同，但不改变原始数组。
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+##### 为什么0.1+0.2不等于0.3？
+
+> 1. js用二进制处理数据，用IEEE754双精度浮点数标准储存Number类型；
+> 2. 精度丢失不是js的问题，二十IEEE754标准存储位数有限；
+> 3. 计算过程中有两次精度丢失，一次在存储，一次在相加；

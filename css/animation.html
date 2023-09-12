@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>animation</title>
+  <style>
+    .border{
+      border: solid 1px;
+    }
+    .avatar-box{
+      position: relative;
+      margin: 250px auto;
+      text-align: center;
+    }
+    .avatar{
+      width: 100px;
+      height: 100px;
+      border-radius: 50%;
+    }
+    .arc{
+      position: absolute;
+      top: 0;
+      left: calc(50% - 50px);
+      width: 100px;
+      height: 100px;
+      border-radius: 50%;
+      background: skyblue;
+      z-index: -1;
+      animation: identifier 5s infinite;
+    }
+    /* .arc:hover{
+      animation-play-state: paused;
+    } */
+    .arc-1:hover{
+      animation-play-state: paused;
+    }
+    .arc-2{
+      animation-delay: 1s;
+    }
+    .arc-3{
+      animation-delay: 2s;
+    }
+    .arc-4{
+      animation-delay: 3s;
+    }
+    .arc-5{
+      animation-delay: 4s;
+    }
+    @keyframes identifier {
+      0% {
+        transform: scale(1);
+        opacity: 1;
+      }
+      100%{
+        transform: scale(6);
+        opacity: 0;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="avatar-box">
+    <img class="avatar" src="https://img1.baidu.com/it/u=136716129,492793366&fm=253&fmt=auto&app=138&f=JPEG?w=700&h=368" alt="avatar">
+    <div class="arc arc-1">1</div>
+    <!-- <div class="arc arc-2">2</div>
+    <div class="arc arc-3">3</div>
+    <div class="arc arc-4">4</div>
+    <div class="arc arc-5">5</div> -->
+  </div>
+  <script>
+    const arcEls = document.querySelectorAll(".arc");
+    document.addEventListener("visibilitychange", function(e) {
+      console.log(document.visibilityState);
+      if (document.visibilityState === "hidden") {
+        for (let arc of arcEls) {
+          console.log(arc.style.animationPlayState);
+          arc.style.animationPlayState = "paused";
+          console.log(arc.style.animationPlayState);
+        }
+      } else if (document.visibilityState === "visible") {
+        for (let arc of arcEls) {
+          arc.style.animationPlayState = "running";
+        }
+      }
+    })
+  </script>
+</body>
+</html>

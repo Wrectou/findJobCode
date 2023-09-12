@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>转盘</title>
+  <style>
+    *{
+      margin: 0;
+      padding: 0;
+    }
+    .container{
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 460px;
+      height: 460px;
+      margin: 150px auto;
+      background: url("https://photo.16pic.com/00/51/93/16pic_5193335_b.jpg") no-repeat center;
+      background-size: contain;
+      border-radius: 50%;
+      animation: rotate 10s linear infinite;
+    }
+    @keyframes rotate {
+      0%{
+        transform: rotate(0);
+      }
+      100%{
+        transform: rotate(360deg);
+      }
+    }
+    @keyframes rotatereverse {
+      0%{
+        transform: rotate(0);
+      }
+      100%{
+        transform: rotate(-360deg);
+      }
+    }
+    .item{
+      position: absolute;
+      width: 100px;
+      height: 100px;
+      line-height: 100px;
+      text-align: center;
+      border-radius: 50%;
+      overflow: hidden;
+    }
+    .item img{
+      width: 100%;
+      height: 100%;
+      animation: rotate 10s linear infinite reverse;
+    }
+    /* .item1{
+      background: salmon;
+    }
+    .item2{
+      background: blue;
+    }
+    .item3{
+      background: skyblue;
+    }
+    .item4{
+      background: gray;
+    }
+    .item5{
+      background: green;
+    } */
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="item item1">
+      <img src="https://img1.baidu.com/it/u=136716129,492793366&fm=253&fmt=auto&app=138&f=JPEG?w=700&h=368" alt="img">
+    </div>
+    <div class="item item2">
+      <img src="https://img1.baidu.com/it/u=136716129,492793366&fm=253&fmt=auto&app=138&f=JPEG?w=700&h=368" alt="img">
+    </div>
+    <div class="item item3">
+      <img src="https://img1.baidu.com/it/u=136716129,492793366&fm=253&fmt=auto&app=138&f=JPEG?w=700&h=368" alt="img">
+    </div>
+    <div class="item item4">
+      <img src="https://img1.baidu.com/it/u=136716129,492793366&fm=253&fmt=auto&app=138&f=JPEG?w=700&h=368" alt="img">
+    </div>
+    <div class="item item5">
+      <img src="https://img1.baidu.com/it/u=136716129,492793366&fm=253&fmt=auto&app=138&f=JPEG?w=700&h=368" alt="img">
+    </div>
+  </div>
+  <script>
+    const itemsElArr = document.querySelectorAll(".item");
+    const containerEl = document.querySelector(".container");
+    const r = containerEl.clientWidth / 2;
+    const count = itemsElArr.length;
+    const pieceDeg = 360 / count;
+
+    for (let i = 0; i < count; i++) {
+      let t = i * pieceDeg;
+      t = (Math.PI / 180) * t;
+      const x = Math.sin(t) * r,
+            y = Math.cos(t) * r;
+            console.log(itemsElArr[i], x, y);
+      itemsElArr[i].style.transform = `translate(${x}px, ${y}px)`;
+    }
+
+  </script>
+</body>
+</html>
