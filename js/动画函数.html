@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>动画函数</title>
+  <style>
+    body{
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+    }
+    button{
+      margin: 10px 0 0;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div id="sale">price: 999.00</div>
+    <button>sale</button>
+  </div>
+  <script>
+    const priceEl = document.querySelector("#sale");
+    const buttonEl = document.querySelector("button");
+
+    buttonEl.addEventListener("click", function() {
+      animate(Number(priceEl.innerText.split(":")[1].trim()), 299, 1000, value => priceEl.innerText = `price: ${value.toFixed(2)}` );
+    });
+
+    // 高阶函数的应用，封装动画函数
+    function animate(from, to, duration, fn) {
+      if (from <= to) alert("from不能大于to！");
+      const dis = from - to;
+      const speed = dis / duration;
+      const startTime = Date.now();
+      let value = from;
+      fn(value);
+
+      function _run() {
+        const now = Date.now();
+        const time = now - startTime;
+        if (time >= duration) {
+          value = to;
+          fn(value);
+          return false;
+        }
+        const d = time * speed;
+        value = from - d;
+        fn(value);
+        requestAnimationFrame(_run);
+      }
+      requestAnimationFrame(_run);
+    }
+
+
+  </script>
+</body>
+</html>

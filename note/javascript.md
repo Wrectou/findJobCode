@@ -1,3 +1,75 @@
+##### js的数据类型
+
+> js有8种数据类型，其中包括7种原始类型，1种引用类型。
+>
+> 原始类型：```Number Boolean Undefined Null BigInt Symbol```
+>
+> 引用类型：```Object```
+>
+> | 类型       | String | Number | Boolean | Undefined | Null   | BigInt | Symbol | Object            |
+> | ---------- | ------ | ------ | ------- | --------- | ------ | ------ | ------ | ----------------- |
+> | **typeof** | string | number | boolean | undefined | object | bigint | symbol | object / function |
+
+##### == 运算的规则
+
+> 从上到下按照规则比较，知道能得到确切的结果为止：
+>
+> 1. 两端类型相同，比较值；
+> 2. 两端存在 ```NaN```，返回```false```；
+> 3. ```undefined``` 和 ```null``` 只有与自身比较，或者相互比较时，才会返回```true```；
+> 4. 两端都是原始类型，转换成数字比较；
+> 5. 一端是原始类型，一端是对象类型，把对象转换成原始类型后进行第4步比较。
+
+##### 对象如何转变成原始类型？
+
+> 1. 如果对象拥有 ```[Symbol.toPrimitive]``` 方法，调用该方法：
+>    - 若方法能得到原始值，使用该原始值；
+>    - 若得不到原始值，抛出异常  Cannot convert object to primitive value （无法将对象转为基元值）
+> 2. 调用对象的 ```valueOf``` 方法：
+>    - 若该方法能得到原始值，使用该原始值；
+>    - 若得不到原始值，进入下一步
+> 3. 调用对象的 ```toString``` 方法：
+>    - 若该方法能得到原始值，使用该原始值；
+>    - 若得不到原始值，抛出异常  Cannot convert object to primitive value （无法将对象转为基元值）
+>
+> ```javascript
+> // 如何让下面的判断成立？ if (a == 1 && a == 2 & a == 3) { console.log("aaa"); }
+> const a = {
+>     count: 1,
+>     [Symbol.toPrimitive]() {
+>         console.log("toPrimitive");
+>         return this.count++;
+>     },
+>     valueOf() {
+>         console.log("valueOf");
+>         return this.count++;
+>     },
+>     toString() {
+>         console.log("toString");
+>         return this.count++;
+>     }
+> }
+> if (a == 1 && a == 2 & a == 3) {
+>     console.log("aaa");
+> }
+> ```
+>
+> 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 ##### Event Loop (事件轮询)
 
 > ###### 总结：
