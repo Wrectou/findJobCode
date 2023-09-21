@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>magnifier</title>
+  <style>
+    *{
+      margin: 0;
+      padding-left: 0;
+    }
+    body{
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      /* text-align: center; */
+    }
+    #canvas{
+      /* margin: 100px auto; */
+      margin: 0 10px;
+      cursor: pointer;
+      /* border: solid 1px red; */
+    }
+    #offCanvas{
+      display: none;
+      border: solid 1px blue;
+    }
+    #showCanvas{
+      /* border: solid 1px; */
+    }
+  </style>
+</head>
+<body>
+  <!-- <canvas id="offCanvas"></canvas> -->
+  <canvas id="canvas"></canvas>
+  <canvas id="showCanvas"></canvas>
+  <script>
+    const canvasEl = document.querySelector("#canvas");
+    const ctx = canvasEl.getContext("2d");
+
+    // const offCanvasEl = document.querySelector("#offCanvas");
+    // const offCtx = offCanvasEl.getContext("2d");
+
+    const showCanvasEl = document.querySelector("#showCanvas");
+    const showCtx = showCanvas.getContext("2d");
+
+
+    const img = new Image();
+    img.onload = function(e) {
+      const { width, height } = e.target;
+      console.log(width, height);
+      canvasEl.width = width / 2;
+      canvasEl.height = height / 2;
+      // offCanvasEl.width = width;
+      // offCanvasEl.height = height;
+      showCanvasEl.width = width / 2;
+      showCanvasEl.height = height / 2;
+      ctx.drawImage(img, 0, 0, canvasEl.width, canvasEl.height);
+      // offCtx.drawImage(img, 0, 0, offCanvasEl.width, offCanvasEl.height);
+    }
+    img.src = "./沙场点兵.jpg";
+    // img.src = "./沙场点兵2.jpg";
+    // img.src = "https://gw.alicdn.com/imgextra/i1/3492954462/O1CN01MLfO2j1ipe1k1JxVa_!!3492954462.jpg_Q75.jpg_.webp";
+    // img.src = "https://img0.utuku.imgcdc.com/650x0/news/20230920/cc392d28-edfe-40a5-9232-338f810ce0e9.jpg";
+    // img.src = "./dianchi.png";
+
+    var isMouseDown = false;
+    var point;
+    var scale = 2;
+    const mr = 100;
+    const lineWidth = 2;
+
+    canvasEl.addEventListener("mousedown", function(e) {
+      e.preventDefault();
+      isMouseDown = true;
+      point = {
+        x: e.offsetX,
+        y: e.offsetY,
+        real: {
+          x: e.offsetX,
+          y: e.offsetY,
+        }
+      }
+      // console.log("mousedown", point);
+      drawCanvasWithMagnifier(true, point);
+    })
+
+    canvasEl.addEventListener("mousemove", function(e) {
+      e.preventDefault();
+      isMouseDown = true;
+      if (isMouseDown) {
+        point = {
+          x: e.offsetX,
+          y: e.offsetY,
+          real: {
+            x: e.offsetX,
+            y: e.offsetY,
+          }
+        }
+        // if (e.offsetX - canvasEl.width / 4 + lineWidth <= 0 + lineWidth) {
+        //   point.x = 0 + canvasEl.width / 4 + lineWidth;
+        // } else if (e.offsetX + canvasEl.width / 4 + lineWidth >= canvasEl.width) {
+        //   point.x = canvasEl.width - canvasEl.width / 4 - lineWidth;
+        // }
+        // if (e.offsetY - canvasEl.height / 4 + lineWidth <= 0 + lineWidth) {
+        //   point.y = 0 + canvasEl.height / 4 + lineWidth;
+        // } else if (e.offsetY + canvasEl.height / 4 + lineWidth >= canvasEl.height) {
+        //   point.y = canvasEl.height - canvasEl.height / 4 - lineWidth;
+        // }
+        
+        if (e.offsetX - canvasEl.width / 4 <= 0) {
+          point.x = 0 + canvasEl.width / 4;
+        } else if (e.offsetX + canvasEl.width / 4 >= canvasEl.width) {
+          point.x = canvasEl.width - canvasEl.width / 4;
+        }
+        if (e.offsetY - canvasEl.height / 4 <= 0) {
+          point.y = 0 + canvasEl.height / 4;
+        } else if (e.offsetY + canvasEl.height / 4 >= canvasEl.height) {
+          point.y = canvasEl.height - canvasEl.height / 4;
+        }
+
+        drawCanvasWithMagnifier(true, point);
+      }
+    })
+
+    canvasEl.addEventListener("mouseup", function(e) {
+      e.preventDefault();
+      isMouseDown = false;
+      drawCanvasWithMagnifier(false);
+    })
+
+    canvasEl.addEventListener("mouseout", function(e) {
+      e.preventDefault();
+      isMouseDown = false;
+      drawCanvasWithMagnifier(false);
+    })
+
+    function drawCanvasWithMagnifier(isShowMagnifier, point) {
+      // ctx.clearRect(0, 0 ,canvasEl.width, canvasEl.height);
+      showCtx.clearRect(0, 0 ,showCanvasEl.width, showCanvasEl.height);
+      ctx.drawImage(img, 0, 0, canvasEl.width, canvasEl.height);
+      if (isShowMagnifier) {
+        drawMagnifier(point);
+      }
+    }
+
+    function drawMagnifier(point) {
+
+      var imgLG_cx = point.x * scale;
+      var imgLG_cy = point.y * scale;
+
+      var sx = imgLG_cx - mr;
+      var sy = imgLG_cy - mr;
+
+      var dx = point.x - mr;
+      var dy = point.y - mr;
+
+      ctx.save();
+
+      ctx.lineWidth = lineWidth;
+      ctx.strokeStyle = "red";
+
+      // 绘制圆点
+      ctx.beginPath();
+      ctx.fillStyle = "red";
+      ctx.arc(canvasEl.width/2-2, canvasEl.height/2-2, 4, 0, Math.PI * 2, false);
+      ctx.arc(point.real.x, point.real.y, 4, 0, Math.PI * 2, false);
+      ctx.fill();
+      ctx.closePath();
+
+      // 绘制圆形放大镜
+      ctx.beginPath();
+      // ctx.arc(point.x, point.y, mr, 0, Math.PI * 2, false);
+      ctx.fillStyle = "rgba(255, 255, 255, .5)";
+      ctx.fillRect(point.x - showCanvasEl.width / 4, point.y - showCanvasEl.height / 4, showCanvasEl.width / 2, showCanvasEl.height / 2)
+      // console.log("rect: ", {x:point.real.x - showCanvasEl.width / 4, y: point.real.y - showCanvasEl.height / 4, width:showCanvasEl.width / 2, height: showCanvasEl.height / 2});
+      ctx.stroke();
+      ctx.clip();
+
+      // 绘制放大后的圆形区域
+      // ctx.drawImage(img, sx, sy, 2 * mr, 2 * mr, dx, dy, 2 * mr, 2 * mr);
+      // showCtx.drawImage(img, point.x - mr / 2 + lineWidth, point.y - mr / 2 + lineWidth, showCanvasEl.width, showCanvasEl.height, 0, 0, showCanvasEl.width, showCanvasEl.height);
+      console.log(point.x, point.real.x, point.x !== point.real.x);
+      // console.log(point.y, point.real.y, point.y !== point.real.y);
+      // console.log(point.x - showCanvasEl.width / 4, point.real.x - showCanvasEl.width / 4 );
+      // let caiX = point.x !== point.real.x ? point.real.x - showCanvasEl.width / 4 : point.x - showCanvasEl.width / 4;
+      // let caiY = point.y !== point.real.y ? point.real.y - showCanvasEl.height / 4 : point.y - showCanvasEl.height / 4;
+      
+      let caiX = point.real.x;
+      let caiY = point.real.y;
+
+      if (point.real.x < canvasEl.width / 2) {
+        console.log("111");
+        if (point.real.x >= canvasEl.width / 4) {
+          console.log("2222");
+          caiX -= canvasEl.width / 2 - point.x;
+        } else {
+          console.log("333");
+          caiX = 0;
+        }
+      } else if (point.real.x > canvasEl.width / 2) {
+        console.log("444");
+        if (point.real.x <= canvasEl.width / 4 * 3) {
+          console.log("5555", point.real.x, canvasEl.width + (point.real.x -canvasEl.width / 4 * 3)*2);
+          // 468 624   312 312
+          // 312-468
+          // 312-624
+          caiX = canvasEl.width + (point.real.x - canvasEl.width / 4 * 3) * 2;
+        } else {
+          console.log("666");
+          caiX = canvasEl.width;
+        }
+      }
+
+      if (point.real.y < canvasEl.height / 2) {
+        console.log("777");
+        if (point.real.y >= canvasEl.height / 4) {
+          console.log("8888");
+          caiY -= canvasEl.height / 2 - point.y;
+        } else {
+          console.log("999");
+          caiY = 0;
+        }
+      } else if (point.real.y > canvasEl.height / 2) {
+        console.log("101010");
+        if (point.real.y <= canvasEl.height / 4 * 3) {
+          console.log("11111111", point.real.h, canvasEl.height + (point.real.y -canvasEl.height / 4 * 3)*2);
+          // 468 624   312 312
+          // 312-468
+          // 312-624
+          caiY = canvasEl.height + (point.real.y - canvasEl.height / 4 * 3) * 2;
+        } else {
+          console.log("121212");
+          caiY = canvasEl.height;
+        }
+      }
+      showCtx.drawImage(img, 
+                        caiX, 
+                        caiY, 
+                        canvasEl.width, 
+                        canvasEl.height, 
+                        0, 
+                        0, 
+                        canvasEl.width, 
+                        canvasEl.height
+                      );
+      console.log("drawImage: ", {caiX: caiX, caiY: caiY, width:canvasEl.width, height: canvasEl.height});
+      ctx.restore();
+
+    }
+    //               左上角                           左下角         右上角          右下角 
+    // 鼠标中心点     90，125                          90，375        280，126        280，380
+    // 对应鼠标矩形   0，0 187，0 0，187 187，250
+    // 新的绘制区域   0，0                              0，500         375，0          375，500
+
+  </script>
+</body>
+</html>

@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>magnifier</title>
+  <style>
+    *{
+      margin: 0;
+      padding-left: 0;
+    }
+    body{
+      text-align: center;
+    }
+    #canvas{
+      margin: 100px auto;
+      cursor: pointer;
+      /* border: solid 1px red; */
+    }
+    #offCanvas{
+      display: none;
+      /* border: solid 1px blue; */
+    }
+  </style>
+</head>
+<body>
+  <canvas id="offCanvas"></canvas>
+  <canvas id="canvas"></canvas>
+  <script>
+    const canvasEl = document.querySelector("#canvas");
+    const ctx = canvasEl.getContext("2d");
+
+    const offCanvasEl = document.querySelector("#offCanvas");
+    const offCtx = offCanvasEl.getContext("2d");
+
+    const img = new Image();
+    img.onload = function(e) {
+      const { width, height } = e.target;
+      canvasEl.width = width / 2;
+      canvasEl.height = height / 2;
+      offCanvasEl.width = width;
+      offCanvasEl.height = height;
+      ctx.drawImage(img, 0, 0, canvasEl.width, canvasEl.height);
+      offCtx.drawImage(img, 0, 0, offCanvasEl.width, offCanvasEl.height);
+    }
+    img.src = "./沙场点兵.jpg";
+
+    var isMouseDown = false;
+    var point;
+    var scale = 2;
+    const mr = 100;
+
+    canvasEl.addEventListener("mousedown", function(e) {
+      e.preventDefault();
+      isMouseDown = true;
+      point = {
+        x: e.offsetX,
+        y: e.offsetY
+      }
+      console.log(point);
+      drawCanvasWithMagnifier(true, point);
+    })
+
+    canvasEl.addEventListener("mousemove", function(e) {
+      e.preventDefault();
+      if (isMouseDown) {
+        point = {
+          x: e.offsetX,
+          y: e.offsetY
+        }
+        console.log(point);
+        drawCanvasWithMagnifier(true, point);
+      }
+    })
+
+    canvasEl.addEventListener("mouseup", function(e) {
+      e.preventDefault();
+      isMouseDown = false;
+      drawCanvasWithMagnifier(false);
+    })
+
+    canvasEl.addEventListener("mouseout", function(e) {
+      e.preventDefault();
+      isMouseDown = false;
+      drawCanvasWithMagnifier(false);
+    })
+
+    function drawCanvasWithMagnifier(isShowMagnifier, point) {
+      ctx.clearRect(0, 0 ,canvasEl.width, canvasEl.height);
+      ctx.drawImage(img, 0, 0, canvasEl.width, canvasEl.height);
+      if (isShowMagnifier) {
+        drawMagnifier(point);
+      }
+    }
+
+    function drawMagnifier(point) {
+
+      var imgLG_cx = point.x * scale;
+      var imgLG_cy = point.y * scale;
+
+      var sx = imgLG_cx - mr;
+      var sy = imgLG_cy - mr;
+
+      var dx = point.x - mr;
+      var dy = point.y - mr;
+
+      ctx.save();
+
+      ctx.lineWidth = 4;
+      ctx.strokeStyle = "#ccc";
+
+      // 绘制圆形放大镜
+      ctx.beginPath();
+      ctx.arc(point.x, point.y, mr, 0, Math.PI * 2, false);
+      ctx.stroke();
+      ctx.clip();
+
+      // 绘制放大后的圆形区域
+      ctx.drawImage(img, sx, sy, 2 * mr, 2 * mr, dx, dy, 2 * mr, 2 * mr);
+      ctx.restore();
+
+    }
+
+  </script>
+</body>
+</html>
